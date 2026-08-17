@@ -34,12 +34,12 @@ Huong dan day du, checklist tung pha va **bang diem 80+10+10**: xem [`LAB.md`](L
 
 Hoc vien **viet code** tai 4 marker `LAB TODO` trong `src/memory_student.py`:
 
-| TODO | Ham | Viec can lam | Case cham |
-| --- | --- | --- | --- |
-| 1/4 | `retrieve_long_term` | `prime_eval_thread` (da co) → `thread.get_user_context` → return `.context` | E02, E03, E08, E09 |
-| 2/4 | `retrieve_episodic` | `graph.search(user_id=..., scope="episodes")` + `render_graph_search` | E04, E05 |
-| 3/4 | `retrieve_semantic` | `graph.search(graph_id=..., scope="episodes")`; fallback `nodes`. Tranh `scope="auto"` (mat marker literal) | E06, E11 |
-| 4/4 | `assemble_context` | `ContextBudgetManager.assemble` (budget 10/4/3/3, priority STM→LT→EP→SEM) | E07 |
+| TODO | Ham                    | Viec can lam                                                                                                      | Case cham          |
+| ---- | ---------------------- | ----------------------------------------------------------------------------------------------------------------- | ------------------ |
+| 1/4  | `retrieve_long_term` | `prime_eval_thread` (da co) → `thread.get_user_context` → return `.context`                               | E02, E03, E08, E09 |
+| 2/4  | `retrieve_episodic`  | `graph.search(user_id=..., scope="episodes")` + `render_graph_search`                                         | E04, E05           |
+| 3/4  | `retrieve_semantic`  | `graph.search(graph_id=..., scope="episodes")`; fallback `nodes`. Tranh `scope="auto"` (mat marker literal) | E06, E11           |
+| 4/4  | `assemble_context`   | `ContextBudgetManager.assemble` (budget 10/4/3/3, priority STM→LT→EP→SEM)                                    | E07                |
 
 Cac task **khong viet code** nhung van tinh diem: smoke/seed, demo short-term (E01/E10), no-memory baseline, comparison, privacy forget, `README_submission.md`.
 
@@ -60,17 +60,17 @@ docker compose run --rm app python -m src.evaluate --impl student --reuse-seeded
 
 ### Bang diem (tran 80 + cong)
 
-| Khoi | Diem | Nguon cham |
-| --- | ---: | --- |
-| 11 case E01-E11 | **56** | `reports/benchmark.json` |
-| Privacy drill | **6** | screenshot forget + verify-only |
-| 4 cau phan tich + `comparison.md` | **6** | `README_submission.md` |
-| 3 cau thuc hanh | **6** | `README_submission.md` |
-| Artefact | **6** | repo |
-| **Tran nen** | **80** | |
-| Golden 20/20 | **+10 hoac 0** | `reports/golden_benchmark.json` |
-| UI demo (hoac report dep toi da 6) | **+10** | `src/demo_ui.py` |
-| **Tong toi da** | **100** | |
+| Khoi                               |                 Diem | Nguon cham                        |
+| ---------------------------------- | -------------------: | --------------------------------- |
+| 11 case E01-E11                    |         **56** | `reports/benchmark.json`        |
+| Privacy drill                      |          **6** | screenshot forget + verify-only   |
+| 4 cau phan tich +`comparison.md` |          **6** | `README_submission.md`          |
+| 3 cau thuc hanh                    |          **6** | `README_submission.md`          |
+| Artefact                           |          **6** | repo                              |
+| **Tran nen**                 |         **80** |                                   |
+| Golden 20/20                       | **+10 hoac 0** | `reports/golden_benchmark.json` |
+| UI demo (hoac report dep toi da 6) |        **+10** | `src/demo_ui.py`                |
+| **Tong toi da**              |        **100** |                                   |
 
 Golden: giang vien phat file **60 phut cuoi**. `data/golden_eval.json` **gitignore**. 20/20 moi duoc 10; thieu 1 case = 0.
 
@@ -161,4 +161,3 @@ docker compose run --rm app python -m src.forget --user-id minh-lab17
 Co **11 evaluation cases** (E01-E11) phu 4 memory layer + 1 case mixed. Score chinh la **retrieval hit rate** tren ground truth (`must_contain_all` / `must_not_contain`). Benchmark danh gia memory retrieval truc tiep, khong de chat model che lap loi retrieval.
 
 Muc tieu: **>= 9/11 PASS (80%)** tren practice set. Tran nen **80**. Golden 20/20 **+10**. UI **+10**. Chi tiet: [`LAB.md` muc 5](LAB.md#5-kiem-tra-ket-qua).
-

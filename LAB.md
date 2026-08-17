@@ -51,21 +51,20 @@ overview:
     - "Giai thich duoc tai sao mot query duoc route vao tung memory layer."
   reassurance: "Starter kit da lo Docker, data, ingestion, polling va report; phan code hoc vien can dien chi nam trong mot file nho."
 ---
-
 ## 1. Thuat ngu can biet
 
-| Thuat ngu goc | Ban chat khai niem | Minh hoa truc quan |
-| --- | --- | --- |
-| `Short-term / Working Memory` | Vung nho nong cua conversation hien tai; nhanh nhung bi gioi han context. | Nho 4-6 tin nhan gan nhat de hieu "no" dang tro den dieu gi. |
-| `Long-term / Declarative Memory` | Facts, preferences, decisions ben vung qua nhieu thread/session. | User da noi tu hom qua rang thich Python; hom nay agent van nho. |
-| `Episodic Memory` | Luu trai nghiem/trajectory va outcome co provenance, phuc vu "lan truoc da lam gi". | Lan truoc tang timeout khong hieu qua; reuse connection pool moi fix duoc. |
-| `Semantic Memory` | Tri thuc domain/doc duoc retrieval theo y nghia, khong phu thuoc mot user cu the. | Quy tac retry payment API duoc tim tu knowledge graph dung chung. |
-| `Context Block` | Context Zep lap rap tu user graph dua tren relevance; la long-term context de dua vao agent. | Query moi ve coding style keo ra user summary + relevant facts. |
-| `Episode` | Mot don vi source da ingest vao Zep; raw source duoc giu de tim kiem va trace provenance. | Mot message, mot event JSON, mot doan document. |
-| `Compaction` | Giam raw transcript bang summary + recent turns + durable notes. | 30 turn cu duoc co lai thanh 3 dong state/decision/TODO. |
-| `Token Budget` | Han muc context cho tung memory layer; retrieval tot nhung qua nhieu van gay nhieu. | Short-term 10%, long-term 4%, episodic 3%, semantic 3%. |
-| `Recency wins` | Khi fact cu va moi mau thuan, thong tin moi hon duoc uu tien va fact cu giu lai cho history/provenance. | User doi backend tu Python sang TypeScript. |
-| `User-scoped namespace` | Memory cua moi user phai tach biet; sai user_id la data-leak bug. | Minh khong duoc recall preference cua Lan. |
+| Thuat ngu goc                      | Ban chat khai niem                                                                                      | Minh hoa truc quan                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `Short-term / Working Memory`    | Vung nho nong cua conversation hien tai; nhanh nhung bi gioi han context.                               | Nho 4-6 tin nhan gan nhat de hieu "no" dang tro den dieu gi.               |
+| `Long-term / Declarative Memory` | Facts, preferences, decisions ben vung qua nhieu thread/session.                                        | User da noi tu hom qua rang thich Python; hom nay agent van nho.           |
+| `Episodic Memory`                | Luu trai nghiem/trajectory va outcome co provenance, phuc vu "lan truoc da lam gi".                     | Lan truoc tang timeout khong hieu qua; reuse connection pool moi fix duoc. |
+| `Semantic Memory`                | Tri thuc domain/doc duoc retrieval theo y nghia, khong phu thuoc mot user cu the.                       | Quy tac retry payment API duoc tim tu knowledge graph dung chung.          |
+| `Context Block`                  | Context Zep lap rap tu user graph dua tren relevance; la long-term context de dua vao agent.            | Query moi ve coding style keo ra user summary + relevant facts.            |
+| `Episode`                        | Mot don vi source da ingest vao Zep; raw source duoc giu de tim kiem va trace provenance.               | Mot message, mot event JSON, mot doan document.                            |
+| `Compaction`                     | Giam raw transcript bang summary + recent turns + durable notes.                                        | 30 turn cu duoc co lai thanh 3 dong state/decision/TODO.                   |
+| `Token Budget`                   | Han muc context cho tung memory layer; retrieval tot nhung qua nhieu van gay nhieu.                     | Short-term 10%, long-term 4%, episodic 3%, semantic 3%.                    |
+| `Recency wins`                   | Khi fact cu va moi mau thuan, thong tin moi hon duoc uu tien va fact cu giu lai cho history/provenance. | User doi backend tu Python sang TypeScript.                                |
+| `User-scoped namespace`          | Memory cua moi user phai tach biet; sai user_id la data-leak bug.                                       | Minh khong duoc recall preference cua Lan.                                 |
 
 ### Kien truc cua lab
 
@@ -116,21 +115,21 @@ Ban hoan thanh khi:
 
 Chi **4 ham** trong `src/memory_student.py` can viet code. Cac task con lai la chay demo, doc control plane, benchmark va viet giai thich.
 
-| # | Task | Loai | File / lenh | Pha | Diem (xem muc 5) |
-| --- | --- | --- | --- | --- | ---: |
-| T1 | Smoke test: Redis, Qdrant, dataset, `ZEP_API_KEY` | Bat buoc chay | `python -m src.smoke` | 0-15 phut | Dieu kien tien quyet (0d, fail = khong cham duoc) |
-| T2 | Seed 1 lan: 2 user + semantic graph | Bat buoc chay | `python -m src.seed` | 0-15 phut | Tien quyet |
-| T3 | So sanh buffer / summary / sliding; giam `max_recent_messages` 6→4; xac nhan deadline van con | Bat buoc quan sat | `src/demo_short_term.py`, `src/short_term.py` | Pha A | E01+E10 = **9d**; giai thich compaction nam trong report |
-| T4 | TODO 1/4: `retrieve_long_term` bang Context Block | Bat buoc code | `src/memory_student.py` | Pha B | E02+E03+E08+E09 = **20d** |
-| T5 | TODO 2/4: `retrieve_episodic` `scope="episodes"` | Bat buoc code | `src/memory_student.py` | Pha C | E04+E05 = **10d** |
-| T6 | TODO 3/4: `retrieve_semantic` tren `graph_id` dung chung | Bat buoc code | `src/memory_student.py` | Pha D | E06+E11 = **11d** |
-| T7 | TODO 4/4: `assemble_context` budget 10/4/3/3 | Bat buoc code | `src/memory_student.py` | Pha E | E07 = **6d** |
-| T8 | Baseline no-memory + student benchmark + comparison | Bat buoc chay | `src.evaluate`, `src.compare_reports` | Pha E | 4 cau phan tich + `comparison.md` = **6d** |
-| T9 | Doc control plane + chay heartbeat / compiled KB / episodic maintenance | Quan sat (khong viet code) | `control_plane/*`, demo scripts | Mini-drill | **0d** (phuc vu cau hoi nop bai) |
-| T10 | Privacy: forget + verify-only | Bat buoc chay | `src.forget` | Pha cuoi (truoc golden) | **6d** |
-| T11 | Viet `README_submission.md` (3 cau) + screenshot 4 case + du file report | Bat buoc nop | repo | Truoc phut 110 | 3 cau **6d** + artefact **6d** |
-| T12 | Golden set 20 case (phat phut 110) | Cong, all-or-nothing | `data/golden_eval.json` gitignore | 60 phut cuoi | **+10 neu 20/20**, else 0 |
-| T13 | Mini-product UI (load case + chat tiep) hoac report dep | Cong | `src/demo_ui.py` | 60 phut cuoi | **+10 UI du checklist**; report dep khong UI toi da **6/10** |
+| #   | Task                                                                                            | Loai                       | File / lenh                                       | Pha                     |                                                         Diem (xem muc 5) |
+| --- | ----------------------------------------------------------------------------------------------- | -------------------------- | ------------------------------------------------- | ----------------------- | -----------------------------------------------------------------------: |
+| T1  | Smoke test: Redis, Qdrant, dataset,`ZEP_API_KEY`                                              | Bat buoc chay              | `python -m src.smoke`                           | 0-15 phut               |                        Dieu kien tien quyet (0d, fail = khong cham duoc) |
+| T2  | Seed 1 lan: 2 user + semantic graph                                                             | Bat buoc chay              | `python -m src.seed`                            | 0-15 phut               |                                                               Tien quyet |
+| T3  | So sanh buffer / summary / sliding; giam`max_recent_messages` 6→4; xac nhan deadline van con | Bat buoc quan sat          | `src/demo_short_term.py`, `src/short_term.py` | Pha A                   |            E01+E10 =**9d**; giai thich compaction nam trong report |
+| T4  | TODO 1/4:`retrieve_long_term` bang Context Block                                              | Bat buoc code              | `src/memory_student.py`                         | Pha B                   |                                           E02+E03+E08+E09 =**20d** |
+| T5  | TODO 2/4:`retrieve_episodic` `scope="episodes"`                                             | Bat buoc code              | `src/memory_student.py`                         | Pha C                   |                                                   E04+E05 =**10d** |
+| T6  | TODO 3/4:`retrieve_semantic` tren `graph_id` dung chung                                     | Bat buoc code              | `src/memory_student.py`                         | Pha D                   |                                                   E06+E11 =**11d** |
+| T7  | TODO 4/4:`assemble_context` budget 10/4/3/3                                                   | Bat buoc code              | `src/memory_student.py`                         | Pha E                   |                                                        E07 =**6d** |
+| T8  | Baseline no-memory + student benchmark + comparison                                             | Bat buoc chay              | `src.evaluate`, `src.compare_reports`         | Pha E                   |                        4 cau phan tich +`comparison.md` = **6d** |
+| T9  | Doc control plane + chay heartbeat / compiled KB / episodic maintenance                         | Quan sat (khong viet code) | `control_plane/*`, demo scripts                 | Mini-drill              |                                   **0d** (phuc vu cau hoi nop bai) |
+| T10 | Privacy: forget + verify-only                                                                   | Bat buoc chay              | `src.forget`                                    | Pha cuoi (truoc golden) |                                                             **6d** |
+| T11 | Viet`README_submission.md` (3 cau) + screenshot 4 case + du file report                       | Bat buoc nop               | repo                                              | Truoc phut 110          |                                3 cau**6d** + artefact **6d** |
+| T12 | Golden set 20 case (phat phut 110)                                                              | Cong, all-or-nothing       | `data/golden_eval.json` gitignore               | 60 phut cuoi            |                                          **+10 neu 20/20**, else 0 |
+| T13 | Mini-product UI (load case + chat tiep) hoac report dep                                         | Cong                       | `src/demo_ui.py`                                | 60 phut cuoi            | **+10 UI du checklist**; report dep khong UI toi da **6/10** |
 
 **Khong phai task coding:** `src/memory_reference.py`, ingestion/polling, Redis/Qdrant baseline, LangGraph demo. Do la starter kit / demo giang vien.
 
@@ -504,40 +503,40 @@ Mot case chi PASS khi **moi** marker `must_contain_all` xuat hien trong retrieve
 
 **Phieu cham:**
 
-| Khoi | Toi da | Diem |
-| --- | ---: | ---: |
-| Auto E01-E11 (muc 5.1) | 56 | |
-| Privacy drill | 6 | |
-| Phan tich + comparison | 6 | |
-| README_submission 3 cau | 6 | |
-| Artefact | 6 | |
-| **Tran nen** | **80** | |
-| Golden 20/20 (T12) | +10 hoac 0 | |
-| UI demo / report dep (T13) | +10 | |
-| Tru diem | | |
-| **Tong** | **100** | |
-| Practice hit rate | 9/11 can | __ / 11 |
-| Golden | 20/20 de +10 | __ / 20 |
-| Ket luan | Dat / Chua dat | |
+| Khoi                       |         Toi da |    Diem |
+| -------------------------- | -------------: | ------: |
+| Auto E01-E11 (muc 5.1)     |             56 |         |
+| Privacy drill              |              6 |         |
+| Phan tich + comparison     |              6 |         |
+| README_submission 3 cau    |              6 |         |
+| Artefact                   |              6 |         |
+| **Tran nen**         |   **80** |         |
+| Golden 20/20 (T12)         |     +10 hoac 0 |         |
+| UI demo / report dep (T13) |            +10 |         |
+| Tru diem                   |                |         |
+| **Tong**             |  **100** |         |
+| Practice hit rate          |       9/11 can | __ / 11 |
+| Golden                     |   20/20 de +10 | __ / 20 |
+| Ket luan                   | Dat / Chua dat |         |
 
 ### 5.1. Bang diem tu dong — 56d
 
 Nguon: `reports/benchmark.json` (`--impl student`). Khong dung golden de cham khoi nay.
 
-| Case | Layer | Marker bat buoc (viet tat) | Cam | TODO | Diem |
-| --- | --- | --- | --- | --- | ---: |
-| E01 | short_term | `ORCHID-27` | — | T3 (local STM) | 3 |
-| E10 | short_term | `REVIEW-DEADLINE-1600`, `Friday`, `16:00` | — | T3 compaction | 6 |
-| E02 | long_term | `Python` | — | TODO 1 | 5 |
-| E03 | long_term | `benchmark report`, `16:00` | — | TODO 1 | 5 |
-| E08 | long_term | `BLUEBIRD-42`, `TypeScript`, `NestJS` | — | TODO 1 recency | 5 |
-| E09 | long_term | `LOTUS-88`, `Java`, `Spring Boot` | `ORCHID-27` | TODO 1 isolation | 5 |
-| E04 | episodic | `ClientSession`, `concurrency=20`, `ASYNC-FIX-20` | — | TODO 2 | 6 |
-| E05 | episodic | `connection churn`, `timeout threshold` | — | TODO 2 | 4 |
-| E06 | semantic | `Idempotency-Key`, `max-3-retries`, `exponential-backoff` | — | TODO 3 | 6 |
-| E11 | semantic | `connection pooling`, `CONN-POOL-FIRST` | — | TODO 3 | 5 |
-| E07 | mixed | `Python`, `Idempotency-Key` | — | TODO 1+3+4 | 6 |
-| **Tong auto** | | **11 case** | | | **56** |
+| Case                | Layer      | Marker bat buoc (viet tat)                                      | Cam           | TODO             |         Diem |
+| ------------------- | ---------- | --------------------------------------------------------------- | ------------- | ---------------- | -----------: |
+| E01                 | short_term | `ORCHID-27`                                                   | —            | T3 (local STM)   |            3 |
+| E10                 | short_term | `REVIEW-DEADLINE-1600`, `Friday`, `16:00`                 | —            | T3 compaction    |            6 |
+| E02                 | long_term  | `Python`                                                      | —            | TODO 1           |            5 |
+| E03                 | long_term  | `benchmark report`, `16:00`                                 | —            | TODO 1           |            5 |
+| E08                 | long_term  | `BLUEBIRD-42`, `TypeScript`, `NestJS`                     | —            | TODO 1 recency   |            5 |
+| E09                 | long_term  | `LOTUS-88`, `Java`, `Spring Boot`                         | `ORCHID-27` | TODO 1 isolation |            5 |
+| E04                 | episodic   | `ClientSession`, `concurrency=20`, `ASYNC-FIX-20`         | —            | TODO 2           |            6 |
+| E05                 | episodic   | `connection churn`, `timeout threshold`                     | —            | TODO 2           |            4 |
+| E06                 | semantic   | `Idempotency-Key`, `max-3-retries`, `exponential-backoff` | —            | TODO 3           |            6 |
+| E11                 | semantic   | `connection pooling`, `CONN-POOL-FIRST`                     | —            | TODO 3           |            5 |
+| E07                 | mixed      | `Python`, `Idempotency-Key`                                 | —            | TODO 1+3+4       |            6 |
+| **Tong auto** |            | **11 case**                                               |               |                  | **56** |
 
 Hit rate practice = PASS / 11. Muc tieu: **>= 9/11 (80%)**.
 
@@ -545,42 +544,42 @@ Hit rate practice = PASS / 11. Muc tieu: **>= 9/11 (80%)**.
 
 #### Privacy drill — 6d
 
-| Tieu chi | Bang chung | Diem |
-| --- | --- | ---: |
-| Da chay `python -m src.forget --user-id minh-lab17` sau khi luu benchmark, **truoc** golden | Screenshot/log delete | 2 |
-| `--verify-only` in `Zep user absent: True` va `Redis user keys remaining: 0` | Screenshot/log verify | 4 |
-| Bo verify | | toi da 2/6 |
-| Khong lam / khong bang chung | | 0 |
+| Tieu chi                                                                                           | Bang chung            |       Diem |
+| -------------------------------------------------------------------------------------------------- | --------------------- | ---------: |
+| Da chay`python -m src.forget --user-id minh-lab17` sau khi luu benchmark, **truoc** golden | Screenshot/log delete |          2 |
+| `--verify-only` in `Zep user absent: True` va `Redis user keys remaining: 0`                 | Screenshot/log verify |          4 |
+| Bo verify                                                                                          |                       | toi da 2/6 |
+| Khong lam / khong bang chung                                                                       |                       |          0 |
 
 Neu da forget `minh-lab17`, **seed lai** truoc golden (graph Lan + semantic van can). Uu tien: chup privacy xong `python -m src.seed` ngay, roi cho golden.
 
 #### Phan tich benchmark — 6d
 
-| Tieu chi | Diem |
-| --- | ---: |
-| Co `comparison.md` hit rate memory vs no-memory | 2 |
-| Cau 1: layer hit rate thap nhat, co so | 1 |
-| Cau 2: case retrieve nhieu token nhat | 1 |
-| Cau 3: E07 = long-term + semantic | 1 |
-| Cau 4: token reduction khong thay hit rate | 1 |
+| Tieu chi                                         | Diem |
+| ------------------------------------------------ | ---: |
+| Co`comparison.md` hit rate memory vs no-memory |    2 |
+| Cau 1: layer hit rate thap nhat, co so           |    1 |
+| Cau 2: case retrieve nhieu token nhat            |    1 |
+| Cau 3: E07 = long-term + semantic                |    1 |
+| Cau 4: token reduction khong thay hit rate       |    1 |
 
 #### README_submission.md — 6d
 
 Toi da **400 tu**. Thieu file = 0d ca khoi.
 
-| Cau hoi bat buoc | Day du | Thieu |
-| --- | ---: | --- |
-| Layer quan trong nhat **trong bo test nay** + chi case | 2 | 1 neu khong chi case |
-| Trade-off Context Block / Zep vs Redis+Qdrant | 2 | 1 neu chi "Zep de hon" |
-| Guardrail chong memory poisoning | 2 | 0 neu khong lien quan lab |
+| Cau hoi bat buoc                                            | Day du | Thieu                     |
+| ----------------------------------------------------------- | -----: | ------------------------- |
+| Layer quan trong nhat**trong bo test nay** + chi case |      2 | 1 neu khong chi case      |
+| Trade-off Context Block / Zep vs Redis+Qdrant               |      2 | 1 neu chi "Zep de hon"    |
+| Guardrail chong memory poisoning                            |      2 | 0 neu khong lien quan lab |
 
 #### Artefact & quy trinh — 6d
 
-| Tieu chi | Diem |
-| --- | ---: |
-| `memory_student.py` khong con `NotImplementedError` o 4 ham | 2 |
-| `reports/benchmark.md` + `reports/benchmark.json` tu `--impl student` | 2 |
-| 4 bang chung: long-term, episodic, semantic, privacy | 2 |
+| Tieu chi                                                                    | Diem |
+| --------------------------------------------------------------------------- | ---: |
+| `memory_student.py` khong con `NotImplementedError` o 4 ham             |    2 |
+| `reports/benchmark.md` + `reports/benchmark.json` tu `--impl student` |    2 |
+| 4 bang chung: long-term, episodic, semantic, privacy                        |    2 |
 
 ### 5.3. Diem cong: Golden + UI
 
@@ -588,46 +587,46 @@ Toi da **400 tu**. Thieu file = 0d ca khoi.
 
 Nguon: `reports/golden_benchmark.json` (`--golden`). Giang vien re-run file goc.
 
-| Ket qua | Diem |
-| --- | ---: |
-| 20/20 PASS, `summary.perfect == true` | **10** |
-| 19/20 tro xuong, thieu file, sua JSON, chay `--impl reference` roi nop nhu student | **0** |
+| Ket qua                                                                             |         Diem |
+| ----------------------------------------------------------------------------------- | -----------: |
+| 20/20 PASS,`summary.perfect == true`                                              | **10** |
+| 19/20 tro xuong, thieu file, sua JSON, chay`--impl reference` roi nop nhu student |  **0** |
 
 Khong partial. Khong dung E01-E11 thay golden.
 
 #### Demo product / report dep — toi da +10
 
-| Muc | Diem |
-| --- | ---: |
-| Load danh sach test case (dataset co san) | 2 |
-| Chon case, hien query / layer / user / thread | 2 |
-| Run retrieval, hien evidence (merged + tot nhat la tung layer) | 3 |
-| Chat tiep tren cung user/thread, history con | 3 |
-| **Tong neu du 4 muc va UI dung duoc** | **10** |
-| Chi report HTML/PDF/Markdown dep, co bang case + screenshot, khong chat | toi da **6** |
-| Chi `src/demo_ui.py` stub chua wire retrieve | **0** |
+| Muc                                                                     |              Diem |
+| ----------------------------------------------------------------------- | ----------------: |
+| Load danh sach test case (dataset co san)                               |                 2 |
+| Chon case, hien query / layer / user / thread                           |                 2 |
+| Run retrieval, hien evidence (merged + tot nhat la tung layer)          |                 3 |
+| Chat tiep tren cung user/thread, history con                            |                 3 |
+| **Tong neu du 4 muc va UI dung duoc**                             |      **10** |
+| Chi report HTML/PDF/Markdown dep, co bang case + screenshot, khong chat | toi da**6** |
+| Chi`src/demo_ui.py` stub chua wire retrieve                           |       **0** |
 
 Hai huong (UI va report dep) **khong cong chong**. Lay max.
 
 ### 5.4. Tru diem va thang dat
 
-| Loi | Tru |
-| --- | ---: |
-| Commit `.env` / `ZEP_API_KEY` / `data/golden_eval.json` | **-25** (toi thieu 0) |
-| Khong nop `reports/benchmark.md` | 0d khoi auto 56 |
-| Copy `memory_reference.py` ma khong giai thich duoc 1 ham | **-30** khoi auto |
-| `--impl reference` doi ten thanh student / golden | 0d khoi do; gian lan |
-| Forget roi khong seed lai, golden fail hang loat | 0d golden (dung rule 20/20) |
+| Loi                                                          |                         Tru |
+| ------------------------------------------------------------ | --------------------------: |
+| Commit`.env` / `ZEP_API_KEY` / `data/golden_eval.json` | **-25** (toi thieu 0) |
+| Khong nop`reports/benchmark.md`                            |             0d khoi auto 56 |
+| Copy`memory_reference.py` ma khong giai thich duoc 1 ham   |     **-30** khoi auto |
+| `--impl reference` doi ten thanh student / golden          |        0d khoi do; gian lan |
+| Forget roi khong seed lai, golden fail hang loat             | 0d golden (dung rule 20/20) |
 
 **Thang:**
 
-| Tong (sau cong golden/UI) | Practice hit rate | Ket luan |
-| ---: | --- | --- |
-| 90-100 | >= 9/11 | Xuat sac (can golden va/hoac UI) |
-| 80-89 | >= 9/11 | Dat muc tieu + co diem cong |
-| 56-79 | >= 9/11 | Dat (pass) neu du artefact |
-| Bat ky | < 9/11 | Chua dat muc tieu retrieval |
-| < 56 | — | Khong dat |
+| Tong (sau cong golden/UI) | Practice hit rate | Ket luan                         |
+| ------------------------: | ----------------- | -------------------------------- |
+|                    90-100 | >= 9/11           | Xuat sac (can golden va/hoac UI) |
+|                     80-89 | >= 9/11           | Dat muc tieu + co diem cong      |
+|                     56-79 | >= 9/11           | Dat (pass) neu du artefact       |
+|                    Bat ky | < 9/11            | Chua dat muc tieu retrieval      |
+|                      < 56 | —                | Khong dat                        |
 
 **Pass:** diem nen **>= 56/80** **va** 9/11 **va** du 3 artefact cot loi **va** khong commit secret. Golden/UI khong bat buoc de pass.
 
@@ -653,14 +652,13 @@ docker compose run --rm app pytest -q
 
 ### 5.7. Loi thuong gap
 
-| Trieu chung | Nguyen nhan thuong gap | Cach xu ly | Anh huong diem |
-| --- | --- | --- | --- |
-| Vua ingest xong search khong thay | Zep graph ingestion bat dong bo. | Cho seed/evaluator polling. | FAIL hang loat |
-| Query semantic ra preference user | Scope sai. | Semantic dung `graph_id`. | E06/E11/E07 + golden semantic |
-| Leak 2 user | Sai `user_id`. | User-scoped moi long-term/episodic call. | E09 + G08/G09/G19 |
-| Golden file not released | Chua den phut 110. | Cho giang vien phat `data/golden_eval.json`. | Exit code 2, 0d golden |
-| 2/11 PASS (chi E01, E10) | Chua implement 4 TODO. | Dien `memory_student.py`. | 9/56 auto |
-
+| Trieu chung                       | Nguyen nhan thuong gap           | Cach xu ly                                    | Anh huong diem                |
+| --------------------------------- | -------------------------------- | --------------------------------------------- | ----------------------------- |
+| Vua ingest xong search khong thay | Zep graph ingestion bat dong bo. | Cho seed/evaluator polling.                   | FAIL hang loat                |
+| Query semantic ra preference user | Scope sai.                       | Semantic dung`graph_id`.                    | E06/E11/E07 + golden semantic |
+| Leak 2 user                       | Sai`user_id`.                  | User-scoped moi long-term/episodic call.      | E09 + G08/G09/G19             |
+| Golden file not released          | Chua den phut 110.               | Cho giang vien phat`data/golden_eval.json`. | Exit code 2, 0d golden        |
+| 2/11 PASS (chi E01, E10)          | Chua implement 4 TODO.           | Dien`memory_student.py`.                    | 9/56 auto                     |
 
 ## 6. Nop bai
 
@@ -709,4 +707,3 @@ docker compose run --rm app python -m src.compare_reports
 docker compose run --rm app python -m src.evaluate --impl student --reuse-seeded --golden
 # optional: make ui
 ```
-
