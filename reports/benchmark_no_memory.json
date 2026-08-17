@@ -79,7 +79,7 @@
       "passed": true,
       "missing": [],
       "forbidden_found": [],
-      "latency_ms": 0.2,
+      "latency_ms": 0.3,
       "retrieved_tokens": 195,
       "full_source_tokens": 100,
       "token_reduction": 0.0,

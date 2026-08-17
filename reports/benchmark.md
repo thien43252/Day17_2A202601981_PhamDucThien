@@ -5,22 +5,22 @@
 - Cases: **11**
 - Passed: **11/11**
 - Evidence hit rate: **100.0%**
-- Average retrieval latency: **5652.7 ms**
+- Average retrieval latency: **719.5 ms**
 - Average token reduction vs full source context: **14.2%**
 
 | Case | Layer | Pass | Latency ms | Retrieved tokens | Token reduction | Missing / Error |
 | --- | --- | --- | ---: | ---: | ---: | --- |
 | E01 | short_term | PASS | 0.0 | 133 | 0.0% |  |
-| E06 | semantic | PASS | 2045.7 | 148 | 67.8% |  |
-| E09 | long_term | PASS | 10892.4 | 750 | 0.0% |  |
+| E06 | semantic | PASS | 464.0 | 148 | 67.8% |  |
+| E09 | long_term | PASS | 1168.0 | 807 | 0.0% |  |
 | E10 | short_term | PASS | 0.3 | 195 | 0.0% |  |
-| E02 | long_term | PASS | 35077.3 | 1474 | 0.0% |  |
-| E03 | long_term | PASS | 10695.0 | 1454 | 0.0% |  |
+| E02 | long_term | PASS | 1295.0 | 1536 | 0.0% |  |
+| E03 | long_term | PASS | 1285.1 | 1530 | 0.0% |  |
 | E04 | episodic | PASS | 221.8 | 285 | 0.0% |  |
-| E05 | episodic | PASS | 246.0 | 304 | 0.0% |  |
-| E07 | mixed | PASS | 1549.0 | 485 | 14.2% |  |
-| E11 | semantic | PASS | 232.8 | 146 | 74.2% |  |
-| E08 | long_term | PASS | 1219.2 | 1442 | 0.0% |  |
+| E05 | episodic | PASS | 226.0 | 304 | 0.0% |  |
+| E07 | mixed | PASS | 1799.2 | 485 | 14.2% |  |
+| E11 | semantic | PASS | 213.9 | 146 | 74.2% |  |
+| E08 | long_term | PASS | 1241.2 | 1516 | 0.0% |  |
 
 ## Evidence excerpts
 
@@ -34,7 +34,7 @@
 
 ### E09 - long_term
 
-`<USER_SUMMARY> Lan's project is LOTUS-88. They prioritize Java and Spring Boot for backend examples and do not use Python in the backend. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples.   - Created At: 2026-08-01 11:00:00     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Lan Tran" }: Toi la Lan. Du an cua toi la LOTUS-88. Toi uu tien Java va Spring Boot, va khong dung Python trong vi du backend. </EPISODE`
+`<USER_SUMMARY> The user's project is LOTUS-88. They prioritize Java and Spring Boot for backend development and do not use Python for backend. </USER_SUMMARY>  <EPISODES> Episodes are source message or document excerpts shown in selection order.   - Created At: 2026-08-01 11:00:20     Source: message     Content: Lab Assistant (assistant): Da hieu: LOTUS-88, Java + Spring Boot cho backend examples.   - Created At: 2026-08-01 11:00:00     Source: message     Content: [user] {   "user_id": "lan-lab17",   "first_name": "Lan",   "last_name": "Tran",   "user_alias": "Lan Tran" }: Toi la Lan. Du an cua toi la LOTUS-88. Toi uu tien Java va Spring Boot, va khong dung Python trong vi du backend. </EP`
 
 ### E10 - short_term
 
@@ -42,11 +42,11 @@
 
 ### E02 - long_term
 
-`<USER_SUMMARY> Minh is working on a benchmark report for an open loop LAB-REPORT-1600, due Friday at 4:00 PM. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh uses Python for personal demos, such as ORCHID-27. Minh is debugging async HTTP and found that reusing the aiohttp ClientSession and setting concurrency to 20 is an effective solution for connection churn, rather than increasing the timeout, which is related to the ASYNC-FIX-20 incident.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses co`
+`<USER_SUMMARY> Minh Nguyen's personal project is ORCHID-27, for which Python is preferred. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh has a deadline to complete a benchmark report by Saturday at 16:00, which is part of an open loop LAB-REPORT-1600. Minh is currently debugging async HTTP and has tried increasing the timeout to 60s. The main issue identified is connection churn, not timeout threshold, related to the ASYNC-FIX-20 incident. The trajectory observed is that increasing the timeout was ineffective, but using ClientSession with a concurrency of 20 resolved the connection churn.  Minh `
 
 ### E03 - long_term
 
-`<USER_SUMMARY> Minh is working on a benchmark report for an open loop LAB-REPORT-1600, due Friday at 4:00 PM. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh uses Python for personal demos, such as ORCHID-27. Minh is debugging async HTTP and found that reusing the aiohttp ClientSession and setting concurrency to 20 is an effective solution for connection churn, rather than increasing the timeout, which is related to the ASYNC-FIX-20 incident.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses co`
+`<USER_SUMMARY> Minh Nguyen's personal project is ORCHID-27, for which Python is preferred. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh has a deadline to complete a benchmark report by Saturday at 16:00, which is part of an open loop LAB-REPORT-1600. Minh is currently debugging async HTTP and has tried increasing the timeout to 60s. The main issue identified is connection churn, not timeout threshold, related to the ASYNC-FIX-20 incident. The trajectory observed is that increasing the timeout was ineffective, but using ClientSession with a concurrency of 20 resolved the connection churn.  Minh `
 
 ### E04 - episodic
 
@@ -58,7 +58,7 @@
 
 ### E07 - mixed
 
-`<LONG_TERM> <USER_SUMMARY> Minh is working on a benchmark report for an open loop LAB-REPORT-1600, due Friday at 4:00 PM. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh uses Python for personal demos, such as ORCHID-27. Minh is debugging async HTTP and found that reusing the aiohttp ClientSession and setting concurrency to 20 is an effective solution for connection churn, rather than increasing the timeout, which is related to the ASYNC-FIX-20 incident.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often`
+`<LONG_TERM> <USER_SUMMARY> Minh Nguyen's personal project is ORCHID-27, for which Python is preferred. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh has a deadline to complete a benchmark report by Saturday at 16:00, which is part of an open loop LAB-REPORT-1600. Minh is currently debugging async HTTP and has tried increasing the timeout to 60s. The main issue identified is connection churn, not timeout threshold, related to the ASYNC-FIX-20 incident. The trajectory observed is that increasing the timeout was ineffective, but using ClientSession with a concurrency of 20 resolved the connection c`
 
 ### E11 - semantic
 
@@ -66,4 +66,4 @@
 
 ### E08 - long_term
 
-`<USER_SUMMARY> Minh is working on a benchmark report for an open loop LAB-REPORT-1600, due Friday at 4:00 PM. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh uses Python for personal demos, such as ORCHID-27. Minh is debugging async HTTP and found that reusing the aiohttp ClientSession and setting concurrency to 20 is an effective solution for connection churn, rather than increasing the timeout, which is related to the ASYNC-FIX-20 incident.  Minh prefers Python and dislikes Java. When explaining code, Minh prefers short examples. Minh is currently learning about async/await and often confuses co`
+`<USER_SUMMARY> Minh Nguyen's personal project is ORCHID-27, for which Python is preferred. For the company project BLUEBIRD-42, the backend must use TypeScript with NestJS, and Python is not to be used for this project's backend. Minh has a deadline to complete a benchmark report by Saturday at 16:00, which is part of an open loop LAB-REPORT-1600. Minh is currently debugging async HTTP and has tried increasing the timeout to 60s. The main issue identified is connection churn, not timeout threshold, related to the ASYNC-FIX-20 incident. The trajectory observed is that increasing the timeout was ineffective, but using ClientSession with a concurrency of 20 resolved the connection churn.  Minh `
